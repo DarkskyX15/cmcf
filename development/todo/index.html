@@ -1,0 +1,1448 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="C to Minecraft Function Compiler — 基于 LLVM IR 的编译框架">
+      
+      
+      
+      
+        <link rel="prev" href="../redesign/">
+      
+      
+        <link rel="next" href="../../llvm_intrinsics/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>待办事项 - CMCF</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cmcf" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="CMCF" class="md-header__button md-logo" aria-label="CMCF" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CMCF
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              待办事项
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CMCF" class="md-nav__button md-logo" aria-label="CMCF" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CMCF
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构设计
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    架构设计
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arch/01-system-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统总览
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arch/02-models-and-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    配置与数据模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arch/03-module-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块系统与包管理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arch/04-syscall/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Syscall 机制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arch/05-handler-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handler 体系
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arch/06-ir-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IR 数据模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arch/07-compiler-frontend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    编译器前端
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arch/08-header-export/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Header 导出
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发文档
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    开发文档
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构总览
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../redesign/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    重新设计方案
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    待办事项
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    待办事项
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔴 核心功能缺失
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔴 核心功能缺失">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-path_vars" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. path_vars 默认全集验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-module-modulejson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. module 模式自动生成 module.json
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-makefile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. makefile 生成与缓存
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟡 功能部分缺失
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🟡 功能部分缺失">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4-initializer-mc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 全局变量 initializer 的 MC 映射
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-export_as" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. EXPORT_AS 注解格式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-env-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. --env CLI 参数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-nameprovider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. NameProvider 实现细化
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 远期/预留
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🟢 远期/预留">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#8-cmcf-repo-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. cmcf repo install 远程仓库获取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-cmcf-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. cmcf install 错误回滚机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-windows-make-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Windows make fallback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-registries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Registries 扩展字段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-export-header-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. --export-header 与 module 模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        补充：代码质量
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    参考
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    参考
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../llvm_intrinsics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLVM Intrinsics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../refs/llvm_ir/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLVM IR 语法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔴 核心功能缺失
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔴 核心功能缺失">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-path_vars" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. path_vars 默认全集验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-module-modulejson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. module 模式自动生成 module.json
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-makefile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. makefile 生成与缓存
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟡 功能部分缺失
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🟡 功能部分缺失">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4-initializer-mc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 全局变量 initializer 的 MC 映射
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-export_as" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. EXPORT_AS 注解格式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-env-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. --env CLI 参数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-nameprovider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. NameProvider 实现细化
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 远期/预留
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🟢 远期/预留">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#8-cmcf-repo-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. cmcf repo install 远程仓库获取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-cmcf-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. cmcf install 错误回滚机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-windows-make-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Windows make fallback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-registries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Registries 扩展字段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-export-header-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. --export-header 与 module 模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        补充：代码质量
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="cmcf">CMCF 实现待办清单</h1>
+<blockquote>
+<p>从设计文档 <code>docs/development/redesign.md</code> 和 Phase 1 实现中提取的未完成项。
+更新日期: 2026-05-31</p>
+</blockquote>
+<hr />
+<h2 id="_1">🔴 核心功能缺失</h2>
+<h3 id="1-path_vars">1. <code>path_vars</code> 默认全集验证</h3>
+<ul>
+<li><strong>来源</strong>: Section 8, 讨论中</li>
+<li><strong>状态</strong>: 已定义初版默认值，需对照 Minecraft pack_format 各版本官方路径核实</li>
+<li><strong>文件</strong>: <code>cmcf/core/config.py</code> — <code>DEFAULT_PATH_VARS</code></li>
+<li><strong>当前值</strong>:
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">DEFAULT_PATH_VARS</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="s2">&quot;tags/function&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="s2">&quot;advancement&quot;</span><span class="p">:</span> <span class="s2">&quot;advancement&quot;</span><span class="p">,</span> <span class="s2">&quot;loot_table&quot;</span><span class="p">:</span> <span class="s2">&quot;loot_table&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="s2">&quot;predicate&quot;</span><span class="p">:</span> <span class="s2">&quot;predicate&quot;</span><span class="p">,</span> <span class="s2">&quot;item_modifier&quot;</span><span class="p">:</span> <span class="s2">&quot;item_modifier&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="s2">&quot;recipe&quot;</span><span class="p">:</span> <span class="s2">&quot;recipe&quot;</span><span class="p">,</span> <span class="s2">&quot;structure&quot;</span><span class="p">:</span> <span class="s2">&quot;structure&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="s2">&quot;dimension&quot;</span><span class="p">,</span> <span class="s2">&quot;dimension_type&quot;</span><span class="p">:</span> <span class="s2">&quot;dimension_type&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="s2">&quot;damage_type&quot;</span><span class="p">:</span> <span class="s2">&quot;damage_type&quot;</span><span class="p">,</span> <span class="s2">&quot;enchantment&quot;</span><span class="p">:</span> <span class="s2">&quot;enchantment&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="p">}</span>
+</code></pre></div></li>
+<li><strong>待做</strong>: 查阅 https://minecraft.wiki/w/Data_pack 确认 pack_format 4-88 间的目录名变化，补全所有注册表路径</li>
+</ul>
+<h3 id="2-module-modulejson">2. module 模式自动生成 <code>module.json</code></h3>
+<ul>
+<li><strong>来源</strong>: 待讨论列表</li>
+<li><strong>状态</strong>: 路径公式已设计（<code>{dist}/module/{id}-{version}-{meta_hash}/module.json</code>），生成逻辑未实现</li>
+<li><strong>需定义</strong>:</li>
+<li>从 <code>cmcf.json</code> 的哪些字段提取 <code>name</code>/<code>version</code>/<code>pack_format</code></li>
+<li>如何统计标注了 <code>CMCF_ENTRY_EXPORT</code> 的函数→生成 <code>syscalls</code> 列表</li>
+<li><code>MetaDict</code> 如何序列化（直接从 <code>cmcf.json.meta</code> 复制？）</li>
+<li>module.json 的 <code>dependencies</code> 是否从 <code>modules.json</code> 提取？</li>
+<li><strong>关联</strong>: Section 8 — <code>compile.mode</code> 输出路径公式，Section 7 — C Header 同时生成</li>
+</ul>
+<h3 id="3-makefile">3. makefile 生成与缓存</h3>
+<ul>
+<li><strong>来源</strong>: Section 1, 待讨论列表</li>
+<li><strong>状态</strong>: 当前 <code>cmcf build</code> 用 Python subprocess 直接调 clang+llvm-link，不生成 makefile</li>
+<li><strong>决策点</strong>: 保持纯 Python 方案还是改为 makefile+make？</li>
+<li>纯 Python: Windows 无需 MSYS2，简单，但不透明</li>
+<li>makefile+make: 用户可手动 <code>make</code>，适合复杂项目，Windows 需额外依赖</li>
+<li><strong>缓存</strong>: 若用 makefile，是否缓存到 <code>.cmcf/makefile</code>？仅 <code>cmcf install/remove</code> 时更新？</li>
+</ul>
+<hr />
+<h2 id="_2">🟡 功能部分缺失</h2>
+<h3 id="4-initializer-mc">4. 全局变量 initializer 的 MC 映射</h3>
+<ul>
+<li><strong>来源</strong>: 设计讨论中 — "标记为待定"</li>
+<li><strong>状态</strong>: <code>IRGlobal</code> 已有 <code>initializer: IROperand | None</code> 字段，<code>IRConverter</code> 已提取</li>
+<li><strong>未决</strong>: 字符串常量（<code>@.str = c"hello\00"</code>）在 MC 中如何表示？</li>
+<li>存为 <code>IRConst(kind="string", value="hello")</code> → 但 mcfunction 中没有字符串类型</li>
+<li>实现时根据用途转换：<code>printf("hello")</code> → <code>tellraw @a "hello"</code></li>
+<li>由哪个 handler 负责转换？syscall handler 还是 memory handler？</li>
+<li><strong>关联</strong>: <code>cmcf/core/ir_converter.py</code> — <code>_convert_global_init()</code></li>
+</ul>
+<h3 id="5-export_as">5. <code>EXPORT_AS</code> 注解格式</h3>
+<ul>
+<li><strong>来源</strong>: 讨论中 — "具体格式实现时细化"</li>
+<li><strong>状态</strong>: HeaderExporter 已实现基本解析（<code>ann.split(":", 3)[2]</code>）</li>
+<li><strong>未决</strong>:</li>
+<li>路径中允许 <code>/</code> 分隔文件夹层级？当前设计支持</li>
+<li>是否需要特殊字符转义？</li>
+<li>导出路径与 mcfunction 路径的对应关系是否一致？</li>
+<li><strong>关联</strong>: <code>cmcf/core/header_exporter.py</code></li>
+</ul>
+<h3 id="6-env-cli">6. <code>--env</code> CLI 参数</h3>
+<ul>
+<li><strong>来源</strong>: Section 6.10</li>
+<li><strong>状态</strong>: 设计文档有说明，但 <code>mcc build</code> 代码中未实现</li>
+<li><strong>需要</strong>: 在 <code>mcc build</code> 的 argparse 中添加 <code>--env</code> 参数，传递给 <code>_load_handlers()</code></li>
+<li><strong>关联</strong>: <code>cmcf/cli/mcc.py</code></li>
+</ul>
+<h3 id="7-nameprovider">7. NameProvider 实现细化</h3>
+<ul>
+<li><strong>来源</strong>: Section 9.3 — "具体实现时再做细化"</li>
+<li><strong>状态</strong>: 已实现基础方法（<code>func_file</code>, <code>exported_file</code>, <code>block_file</code>, <code>scoreboard_obj</code> 等）</li>
+<li><strong>未决</strong>:</li>
+<li>是否需要根据 pack_format 动态调整目录名（如 <code>"function"</code> vs <code>"functions"</code>）？</li>
+<li>当前 <code>DEFAULT_PATH_VARS</code> 已含此信息，NameProvider 是否应该读取 path_vars？</li>
+<li><code>scoreboard_obj</code> 和 <code>scoreboard_player</code> 的命名避免与 Minecraft 保留名冲突？</li>
+<li><strong>关联</strong>: <code>cmcf/core/context.py</code></li>
+</ul>
+<hr />
+<h2 id="_3">🟢 远期/预留</h2>
+<h3 id="8-cmcf-repo-install">8. <code>cmcf repo install</code> 远程仓库获取</h3>
+<ul>
+<li><strong>来源</strong>: 待讨论列表</li>
+<li><strong>状态</strong>: 仅支持本地路径 <code>repo install /path/to/module</code></li>
+<li><strong>方向</strong>: 支持 URL（<code>repo install https://github.com/user/module</code>）或 Git 仓库</li>
+</ul>
+<h3 id="9-cmcf-install">9. <code>cmcf install</code> 错误回滚机制</h3>
+<ul>
+<li><strong>来源</strong>: 待讨论列表</li>
+<li><strong>状态</strong>: 部分安装失败时不回滚（如 handler 复制完成但 syscall 冲突报错后，handler 文件已写入磁盘）</li>
+<li><strong>方向</strong>: 事务式安装：先写入临时目录，全部验证通过后原子 rename</li>
+</ul>
+<h3 id="10-windows-make-fallback">10. Windows make fallback</h3>
+<ul>
+<li><strong>来源</strong>: 待讨论列表</li>
+<li><strong>状态</strong>: 当前 <code>cmcf build</code> 用 Python subprocess 直接调 clang，不依赖 make</li>
+<li><strong>决策</strong>: 若未来改为 makefile 方案，需要纯 Python fallback 或推荐 Windows 用户安装 make</li>
+</ul>
+<h3 id="11-registries">11. <code>Registries</code> 扩展字段</h3>
+<ul>
+<li><strong>来源</strong>: Section 9.5</li>
+<li><strong>状态</strong>: 预留接口，无实现
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">Registries</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">syscall</span><span class="p">:</span> <span class="n">SysCallRegistry</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="c1"># 未来扩展: variable_mapping, function_table, annotation_index</span>
+</code></pre></div></li>
+</ul>
+<h3 id="12-export-header-module">12. <code>--export-header</code> 与 module 模式</h3>
+<ul>
+<li><strong>来源</strong>: Section 7 — "module 模式始终导出 Header，datapack 模式需 <code>--export-header</code>"</li>
+<li><strong>状态</strong>: <code>mcc build</code> 代码中 <code>config.export_header</code> 可通过 <code>--export-header</code> CLI 设置，但 ExportHeaderHandler 未被注册（handler 未实现）</li>
+<li><strong>关联</strong>: <code>cmcf/cli/mcc.py</code>, <code>cmcf/core/header_exporter.py</code></li>
+</ul>
+<hr />
+<h2 id="_4">补充：代码质量</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>议题</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13</td>
+<td><code>echo_test</code> handler 相对导入</td>
+<td>echo.py 使用 <code>from cmcf.core.handler import ...</code>（绝对导入），在项目 handler 加载场景下依赖 cmcf 在 PYTHONPATH 上。若模块从 site_libs 安装，需要确认导入路径正确</td>
+</tr>
+<tr>
+<td>14</td>
+<td>cmcf package 安装测试</td>
+<td>当前所有测试通过 <code>PYTHONPATH</code> 设置运行，未测试 <code>pip install</code> 后的 console_scripts 行为</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

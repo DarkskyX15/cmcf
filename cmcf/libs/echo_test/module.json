@@ -1,0 +1,8 @@
+{
+    "name": "echo_test",
+    "version": "1.0.0",
+    "pack_format": {"min": [4, 0], "max": [88, 0]},
+    "handler": "handler/",
+    "source": "source/",
+    "source_alias": "echo"
+}

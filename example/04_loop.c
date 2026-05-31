@@ -1,14 +1,14 @@
-int sum_to(int n) {
-    int result = 0;
-    int i = 0;
+float sum_to(float n) {
+    float result = 1.0f;
+    float i = 1.0f;
     while (i < n) {
-        result = result + i;
-        i = i + 1;
+        result = result * i;
+        i = i + 1.0f;
     }
     return result;
 }
 
 int main(void) {
-    int s = sum_to(5);
-    return s;
+    float s = sum_to(5);
+    return (int)s;
 }

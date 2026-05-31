@@ -1,0 +1,39 @@
+site_name: CMCF
+site_description: C to Minecraft Function Compiler — 基于 LLVM IR 的编译框架
+docs_dir: docs
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - content.code.copy
+
+nav:
+  - 首页: README.md
+  - 架构设计:
+      - 系统总览: arch/01-system-overview.md
+      - 配置与数据模型: arch/02-models-and-config.md
+      - 模块系统与包管理: arch/03-module-system.md
+      - Syscall 机制: arch/04-syscall.md
+      - Handler 体系: arch/05-handler-system.md
+      - IR 数据模型: arch/06-ir-model.md
+      - 编译器前端: arch/07-compiler-frontend.md
+      - Header 导出: arch/08-header-export.md
+  - 开发文档:
+      - 架构总览: development/architecture.md
+      - 重新设计方案: development/redesign.md
+      - 待办事项: development/todo.md
+  - 参考:
+      - LLVM Intrinsics: llvm_intrinsics.md
+      - LLVM IR 语法: refs/llvm_ir.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - admonition
+  - tables

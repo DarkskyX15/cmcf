@@ -3,7 +3,7 @@ requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mcmf"
+name = "cmcf"
 version = "0.2.0"
 description = "C to Minecraft Function Compiler - A LLVM IR based compilation framework"
 readme = "README.md"
@@ -47,7 +47,11 @@ Documentation = "https://github.com/yourusername/cmcf/docs"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["mcmf*"]
+include = ["cmcf*"]
+
+[project.scripts]
+cmcf = "cmcf.cli.cmcf:main"
+mcc  = "cmcf.cli.mcc:main"
 
 [tool.black]
 line-length = 100

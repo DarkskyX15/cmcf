@@ -1,0 +1,1 @@
+clang -O1 -S -emit-llvm -target riscv64-unknown-none-elf -march=rv64imfd 04_loop.c

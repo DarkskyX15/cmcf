@@ -3,8 +3,6 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-from cmcf.config import CompileConfig
-
 
 class LinkerError(Exception):
     def __init__(self, message: str, stderr: str = "") -> None:
@@ -13,27 +11,25 @@ class LinkerError(Exception):
 
 
 class LinkerInterface:
-    def __init__(self, config: CompileConfig) -> None:
-        self._config = config
+    def __init__(self, llvm_link_path: str = "llvm-link") -> None:
+        self._path = llvm_link_path
 
     def link(self, inputs: list[Path], output: Path) -> None:
-        cmd = [self._config.llvm_link_path, "-o", str(output)]
+        cmd = [self._path, "-o", str(output)]
         cmd.extend(str(p) for p in inputs)
-
         result = subprocess.run(cmd, capture_output=True, text=True)
-
         if result.returncode != 0:
             raise LinkerError(
                 f"llvm-link exited with code {result.returncode}",
                 stderr=result.stderr,
             )
 
-    def is_available(self) -> bool:
+    @staticmethod
+    def is_available(path: str = "llvm-link") -> bool:
         try:
             result = subprocess.run(
-                [self._config.llvm_link_path, "--version"],
-                capture_output=True,
-                timeout=10,
+                [path, "--version"],
+                capture_output=True, timeout=10,
             )
             return result.returncode == 0
         except (FileNotFoundError, subprocess.TimeoutExpired):
